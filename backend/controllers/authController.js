@@ -90,6 +90,52 @@ const authController = {
             console.error('Login error:', error);
             res.status(500).json({ error: 'Server error during login' });
         }
+    },
+
+    async adminLogin(req, res) {
+        try {
+            const { email, password } = req.body;
+
+            if (!email || !password) {
+                return res.status(400).json({ error: 'Email and password are required' });
+            }
+
+            const user = await UserModel.findByEmail(email);
+            if (!user) {
+                return res.status(401).json({ error: 'Invalid credentials' });
+            }
+
+            if (user.role !== 'admin') {
+                return res.status(403).json({ error: 'Access denied: Admin only' });
+            }
+
+            const isMatch = await bcrypt.compare(password, user.password_hash);
+            if (!isMatch) {
+                return res.status(401).json({ error: 'Invalid credentials' });
+            }
+
+            const token = jwt.sign(
+                { userId: user.id, role: user.role },
+                process.env.JWT_SECRET,
+                { expiresIn: '24h' }
+            );
+
+            res.json({
+                message: 'Admin login successful',
+                token,
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    hostelBlock: user.hostel_block,
+                    roomNumber: user.room_number
+                }
+            });
+        } catch (error) {
+            console.error('Admin login error:', error);
+            res.status(500).json({ error: 'Server error during admin login' });
+        }
     }
 };
 

@@ -23,9 +23,9 @@ const AdminDashboard = () => {
     setError('');
     try {
       const params = new URLSearchParams();
-      if (filters.status !== 'All') params.append('status', filters.status);
-      if (filters.category !== 'All') params.append('category', filters.category);
-      if (filters.priority !== 'All') params.append('priority', filters.priority);
+      if (filters.status && filters.status !== 'All') params.append('status', filters.status);
+      if (filters.category && filters.category !== 'All') params.append('category', filters.category);
+      if (filters.priority && filters.priority !== 'All') params.append('priority', filters.priority);
 
       const [complaintsRes, statsRes] = await Promise.all([
         fetch(`${apiBaseUrl}/admin/complaints?${params.toString()}`, {
@@ -239,8 +239,8 @@ const AdminDashboard = () => {
                           c.status === 'Pending'
                             ? 'In Progress'
                             : c.status === 'In Progress'
-                            ? 'Resolved'
-                            : 'Pending'
+                              ? 'Resolved'
+                              : 'Pending'
                         )
                       }
                     >

@@ -198,7 +198,7 @@ const StudentDashboard = () => {
             <strong>{user.name}</strong>
           </p>
           <p>
-            {user.hostel_block} / Room {user.room_number}
+            {user.hostelBlock} / Room {user.roomNumber}
           </p>
         </div>
       )}

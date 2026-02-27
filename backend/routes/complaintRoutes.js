@@ -1,7 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
 const complaintModel = require('../models/complaintModel');
+
+// Configure multer for image uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage });
 
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
@@ -18,9 +31,10 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Create a new complaint
-router.post('/', authenticateToken, async (req, res) => {
+router.post('/', authenticateToken, upload.single('image'), async (req, res) => {
     try {
-        const { category, description, priority, imagePath } = req.body;
+        const { category, description, priority } = req.body;
+        const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
         if (!category || !description || !priority) {
             return res.status(400).json({ error: 'Category, description, and priority are required' });
