@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+db_env.env
+config.txt
+config.yml
+compose.md
+build.log
+build-plain.txt
+db.log
