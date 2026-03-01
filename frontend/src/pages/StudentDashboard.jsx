@@ -163,7 +163,7 @@ const StudentDashboard = () => {
           <table className="table">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Student Name</th>
                 <th>Category</th>
                 <th>Priority</th>
                 <th>Status</th>
@@ -173,7 +173,7 @@ const StudentDashboard = () => {
             <tbody>
               {complaints.map((c) => (
                 <tr key={c.id}>
-                  <td>{c.id}</td>
+                  <td>{user ? user.name : 'Student'}</td>
                   <td>{c.category}</td>
                   <td>{c.priority}</td>
                   <td>{c.status}</td>
@@ -191,18 +191,20 @@ const StudentDashboard = () => {
         )}
       </div>
 
-      {user && (
-        <div className="card small-card">
-          <h3>Student Info</h3>
-          <p>
-            <strong>{user.name}</strong>
-          </p>
-          <p>
-            {user.hostelBlock} / Room {user.roomNumber}
-          </p>
-        </div>
-      )}
-    </section>
+      {
+        user && (
+          <div className="card small-card">
+            <h3>Student Info</h3>
+            <p>
+              <strong>{user.name}</strong>
+            </p>
+            <p>
+              {user.hostelBlock} / Room {user.roomNumber}
+            </p>
+          </div>
+        )
+      }
+    </section >
   );
 };
 

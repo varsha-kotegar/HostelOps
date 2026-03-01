@@ -13,6 +13,10 @@ FROM node:20-alpine AS build
 # Set working directory for the build stage
 WORKDIR /app
 
+# Accept build arguments
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+
 # Copy dependency manifests first to leverage Docker layer caching
 COPY package.json package-lock.json* ./
 
